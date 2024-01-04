@@ -1,0 +1,5 @@
+﻿teacher_id,name,surname,password,is_headteacher,course_id
+1,Zbigniew,Wasilewski,t7284,1,NULL
+2,Anna,Czakra,t9012,0,2
+3,Monika,Werna,t0819,0,1
+4,Tadeusz,Przerwa,t5678,0,3

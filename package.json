@@ -1,0 +1,30 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Database project for studies",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrSpokeMan/Data_Structure_Project.git"
+  },
+  "author": "Filip Mirski, Dominik Molenda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrSpokeMan/Data_Structure_Project/issues"
+  },
+  "homepage": "https://github.com/MrSpokeMan/Data_Structure_Project#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mysql2": "^3.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

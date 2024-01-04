@@ -1,0 +1,6 @@
+﻿student_id,name,password,surname,parent_id
+1,Stefan,s1234,Mankiel,5
+2,Andrzej,s2345,Popul,1
+3,Marek,s5346,Carbon,3
+4,Daniel,s7586,Obaba,2
+5,Oskar,s0987,Sernik,4
