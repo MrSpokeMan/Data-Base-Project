@@ -1,11 +1,24 @@
 import express from "express"
-import { getStudents, getStudentById } from "./db.js"
+import { getStudents, getStudentById, login } from "./db.js"
+import bodyParser from "body-parser"
 
 const app = express()
-const port = 3000
+const port = process.env.PORT
+
+app.use(bodyParser.json())
 
 app.get("/",function(req, res){
     response.send("Witaj w dzienniku elektronicznym!")
+})
+
+app.post("/login", async function (req, res) {
+    const { username, password } = req.body;
+    try {
+        const token = await login(username, password);
+        res.send({ success: true, token });
+    } catch (error) {
+        res.status(401).send({ success: false, message: error.message });
+    }
 })
 
 app.get("/students", async function (req, res) {

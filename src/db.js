@@ -1,5 +1,6 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -22,9 +23,15 @@ export async function getStudentById(id) {
     return rows[0];
 }
 
-export async function getStudentInfoByParentId(id) {
-    const [rows, fields] = await pool.query("SELECT * FROM student WHERE parent_id = ?", [id]);
-    return rows[0];
+export async function getStudentInfoByParentId(parent_id) {
+    const [rows, fields] = await pool.query("SELECT student_id FROM student WHERE parent_id = ?", [parent_id]);
+    const [info, fields2] = await pool.query("SELECT grade FROM grade WHERE student_id = ?", [rows[0].student_id]);
+    return info;
+}
+
+export async function getStudentGradesByStudentId(student_id) {
+    const [rows, fields] = await pool.query("SELECT * FROM grade WHERE student_id = ?", [student_id]);
+    return rows;
 }
 
 export async function getStudentsByCourseId(id) {
@@ -32,5 +39,55 @@ export async function getStudentsByCourseId(id) {
     return rows;
 }
 
-// const result = await getStudentById(2);
-// console.log(result);
+// Do przemyślenia bo mogłem coś napisaś źle, na pewno do przetestowania
+export async function getStudentGradesByCourseId(course_id, student_id) {
+    const [rows, fields] = await pool.query("SELECT * FROM grade WHERE course_id = ? and student_id=? ", [course_id, student_id]);
+    return rows;
+}
+
+export async function getTeacherIdByCourseId(id) {
+    const [rows, fields] = await pool.query("SELECT teacher_id FROM teacher WHERE course_id = ?", [id]);
+    return rows[0];
+}
+
+export async function addGrade(grade, student_id, course_id) {
+    const teacher_id = await getTeacherIdByCourseId(course_id);
+    const [rows, fields] = await pool.query(`INSERT INTO grade (grade, student_id, course_id, teacher_id) VALUES (?, ?, ?, ?)`, [grade, student_id, course_id, teacher_id.teacher_id]);
+    return rows;
+}
+
+export async function deleteGrade(grade_id) {
+    const [rows, fields] = await pool.query("DELETE FROM grade WHERE grade_id = ?", [grade_id]);
+    return rows;
+}
+
+// Username is a surname of a user
+export async function login(username, password) {
+    const user = await getUserFromDatabase(username, password);
+    if (!user || user.password !== password) {
+        throw new Error("Invalid username or password");
+    }
+  
+    // Generate a JWT token
+    const token = jwt.sign({ username: user.surname }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    return token;
+}
+
+async function getUserFromDatabase(username, password) {
+    let poolReq;
+    if (password[0] == 's')
+        poolReq = pool.query("SELECT * FROM student WHERE surname = ?", [username])
+    else if (password[0] == 't')
+        poolReq = pool.query("SELECT * FROM teacher WHERE surname = ?", [username])
+    else
+        poolReq = pool.query("SELECT * FROM parent WHERE surname = ?", [username])
+    const user = poolReq
+        .then(([rows]) => rows[0])
+        .catch((error) => {
+            console.error("Error fetching user from database:", error);
+            throw error;
+        });
+
+    return user;
+}
