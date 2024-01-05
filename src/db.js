@@ -61,6 +61,18 @@ export async function deleteGrade(grade_id) {
     return rows;
 }
 
+export async function checkAttendance(student_id, course_id, isPresent) {
+    const teacherId = await getTeacherIdByCourseId(course_id);
+    const [rows, fields] = await pool.query("INSERT INTO attendance (student_id, course_id, teacher_id ,is_present) VALUES (?, ?, ?, ?)", [student_id, course_id, teacherId.teacher_id, isPresent]);
+    return rows;
+}
+
+export async function getAttendance(student_id) {
+    const [rows, fields] = await pool.query("SELECT course_id, student_id, date, is_present FROM attendance WHERE student_id = ?", [student_id]);
+    return rows;
+}
+
+
 // Username is a surname of a user
 export async function login(username, password) {
     const user = await getUserFromDatabase(username, password);
@@ -71,7 +83,7 @@ export async function login(username, password) {
     // Generate a JWT token
     const token = jwt.sign({ username: user.surname }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    return token;
+    return {user, token};
 }
 
 async function getUserFromDatabase(username, password) {

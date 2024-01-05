@@ -43,7 +43,7 @@ CREATE TABLE `Attendance` (
     `course_id` INT UNSIGNED NOT NULL,
     `teacher_id` INT UNSIGNED NOT NULL,
     `student_id` INT UNSIGNED NOT NULL,
-    `date` DATE NOT NULL DEFAULT NOW(),
+    `date` TIMESTAMP NOT NULL DEFAULT NOW(),
     `is_present` TINYINT(1) NOT NULL,
     PRIMARY KEY (`attendance_id`),
     FOREIGN KEY (`course_id`) REFERENCES `Course`(`course_id`),
