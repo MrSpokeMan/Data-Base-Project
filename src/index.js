@@ -4,7 +4,7 @@ import bodyParser from "body-parser"
 import { authenticate } from "./auth.js"
 
 const app = express()
-const port = process.env.PORT
+const port = 4000
 
 app.use(bodyParser.json())
 
