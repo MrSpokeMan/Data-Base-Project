@@ -4,6 +4,7 @@ import bodyParser from "body-parser"
 import { authenticate } from "./auth.js"
 
 const app = express()
+// ustawilem na 4k zeby sprawdzic czy moge odpalic a nie pamietam co tam bylo wczesniej XD
 const port = 4000
 
 app.use(bodyParser.json())
