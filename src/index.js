@@ -9,7 +9,7 @@ const port = 4000
 
 app.use(bodyParser.json())
 
-app.get("/",function(req, res){
+app.get("/welcome",function(req, res){
     res.send("Witaj w dzienniku elektronicznym!")
 })
 
@@ -17,8 +17,8 @@ app.post("/login", async function (req, res) {
     const { username, password } = req.body;
     try {
         const {user, token} = await login(username, password);
-        res.cookie("token", token, { httpOnly: true });
-        res.send({ success: true, token });
+        res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" });
+        res.send(user);
     } catch (error) {
         res.status(401).send({ success: false, message: error.message });
     }

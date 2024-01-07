@@ -81,7 +81,7 @@ export async function login(username, password) {
     }
   
     // Generate a JWT token
-    const token = jwt.sign({ username: user.surname }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     return {user, token};
 }
@@ -89,11 +89,11 @@ export async function login(username, password) {
 async function getUserFromDatabase(username, password) {
     let poolReq;
     if (password[0] == 's')
-        poolReq = pool.query("SELECT * FROM student WHERE surname = ?", [username])
+        poolReq = pool.query("SELECT * FROM student WHERE password = ?", [username])
     else if (password[0] == 't')
-        poolReq = pool.query("SELECT * FROM teacher WHERE surname = ?", [username])
+        poolReq = pool.query("SELECT * FROM teacher WHERE password = ?", [username])
     else
-        poolReq = pool.query("SELECT * FROM parent WHERE surname = ?", [username])
+        poolReq = pool.query("SELECT * FROM parent WHERE password = ?", [username])
     const user = poolReq
         .then(([rows]) => rows[0])
         .catch((error) => {
