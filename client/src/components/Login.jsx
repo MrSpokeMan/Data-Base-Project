@@ -18,7 +18,7 @@ const Login = ({ setLoggedIn }) => {
           Login to <span className={"text-violet-500"}>EduConnect</span>
         </h1>
       </div>
-      <form className={"w-5/6 flex flex-col min-w-full mb-6"} onSubmit={validateUser}>
+      <form className={"w-5/6 flex flex-col min-w-full mb-6"}>
         <label className={"text-lg font-medium "}>
           Login:
           <input
@@ -47,6 +47,7 @@ const Login = ({ setLoggedIn }) => {
           <button
             className={"bg-violet-500 rounded-md text-white p-2.5 hover:bg-violet-600"}
             type='submit'
+            onClick={validateUser}
           >
             <ArrowForwardIcon />
           </button>
