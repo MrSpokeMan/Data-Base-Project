@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Dashboard from "./components/Dashboard.jsx"
-import Landing from "./components/Landing.jsx"
-import PrivateRoutes from "./components/PrivateRoutes.jsx"
+import Dashboard from "./views/dashboard/Dashboard.jsx"
+import Landing from "./views/landing/Landing.jsx"
+import PrivateRoutes from "./utils/PrivateRoutes.jsx"
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false)
