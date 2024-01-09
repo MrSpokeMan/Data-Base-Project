@@ -1,14 +1,41 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const Login = ({ setLoggedIn }) => {
 
   const navigate = useNavigate()
 
-  function validateUser() {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
+  async function validateUser() {
     event.preventDefault()
-    setLoggedIn(true)
-    navigate("/")
+    try {
+      const response = await fetch('http://localhost:4000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      console.log(response)
+      if (response.ok) {
+        console.log("Response is okay")
+        const data = await response.json()
+        if (data.succces) {
+          setLoggedIn(true)
+          navigate("/")
+        } else {
+          console.log("Login at backend didn't work")
+          console.log(data)
+        }
+      } else {
+        console.log("Response is not okay")
+      }
+    } catch {
+      console.log("POST didn't work")
+    }
   }
 
   return (
@@ -24,21 +51,27 @@ const Login = ({ setLoggedIn }) => {
           <input
             type={"text"}
             name={"login"}
+            value={username}
+            onChange={e => setUsername(e.target.value)}
             className={"border-2 border-gray-200 rounded-md w-full mb-4 p-1"}
             placeholder={"Enter your login"}
-            autoComplete="off" />
+            autoComplete="off"
+          />
         </label>
         <label className={"text-lg font-medium "}>
           Password:
           <input
             type={"password"}
             name={"password"}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
             className={"border-2 border-gray-200 rounded-md w-full p-1"}
             placeholder={"Enter your password"}
             autoComplete="off" />
         </label>
         <div className={""}>
           <button
+            type="button"
             className={"font-medium text-base text-gray-400 mb-4"}>
             Forgot password?
           </button>
@@ -46,9 +79,8 @@ const Login = ({ setLoggedIn }) => {
         <div className={"flex flex-row justify-end"}>
           <button
             className={"bg-violet-500 rounded-md text-white p-2.5 hover:bg-violet-600"}
-            type='submit'
-            onClick={validateUser}
-          >
+            type="submit"
+            onClick={validateUser} >
             <ArrowForwardIcon />
           </button>
         </div>
