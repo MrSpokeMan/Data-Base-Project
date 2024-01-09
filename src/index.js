@@ -5,7 +5,7 @@ import { authenticate } from "./auth.js"
 
 const app = express()
 // ustawilem na 4k zeby sprawdzic czy moge odpalic a nie pamietam co tam bylo wczesniej XD
-const port = 4000
+const port = process.env.PORT
 
 app.use(bodyParser.json())
 
@@ -24,18 +24,18 @@ app.post("/login", async function (req, res) {
     }
 })
 
-app.post("/grade", authenticate, async function (req, res) {
+app.post("/grade", async function (req, res) {
     const { grade, student_id, course_id } = req.body;
     const result = await addGrade(grade, student_id, course_id);
     res.send(result);
 })
 
-app.get("/students", authenticate, async function (req, res) {
+app.get("/students", async function (req, res) {
     const students = await getStudents();
     res.send(students);
 });
 
-app.get("/student/:id", authenticate, async function (req, res) {
+app.get("/student/:id", async function (req, res) {
     const student = await getStudentById(req.params.id);
     res.send(student);
 });
@@ -45,14 +45,14 @@ app.delete("/grade/:id", authenticate, async function (req, res) {
     res.send(result);
 });
 
-app.post("/attendance", authenticate, async function (req, res) {
+app.post("/attendance", async function (req, res) {
     const { student_id, course_id, isPresent } = req.body;
     const result = await checkAttendance(student_id, course_id, isPresent);
     res.send(result);
 });
 
 // Student ID to check his attendance
-app.get("/attendance/:id", authenticate, async function (req, res) {
+app.get("/attendance/:id", async function (req, res) {
     const attendance = await getAttendance(req.params.id);
     res.send(attendance);
 });
