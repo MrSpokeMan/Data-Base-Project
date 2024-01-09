@@ -79,11 +79,11 @@ export async function login(username, password) {
     if (!user || user.password !== password) {
         throw new Error("Invalid username or password");
     }
-  
+
     // Generate a JWT token
     const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    return {user, token};
+    return { user, token };
 }
 
 async function getUserFromDatabase(username, password) {

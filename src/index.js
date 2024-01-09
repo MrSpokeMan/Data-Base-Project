@@ -2,23 +2,33 @@ import express from "express"
 import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance } from "./db.js"
 import bodyParser from "body-parser"
 import { authenticate } from "./auth.js"
+import cors from 'cors';
 
 const app = express()
-// ustawilem na 4k zeby sprawdzic czy moge odpalic a nie pamietam co tam bylo wczesniej XD
+// it should be like this but CORS is the real enemy...
+const allowedOrigins = ['http://localhost:5173/'];
+const options = {
+    origin: '*',
+    credentials: true,
+}
+
+app.use(cors(options));
+
+// 4k FULL HD
 const port = process.env.PORT
 
 app.use(bodyParser.json())
 
-app.get("/welcome",function(req, res){
+app.get("/welcome", function (req, res) {
     res.send("Witaj w dzienniku elektronicznym!")
 })
 
 app.post("/login", async function (req, res) {
     const { username, password } = req.body;
     try {
-        const {user, token} = await login(username, password);
+        const { user, token } = await login(username, password);
         res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" });
-        res.send(user);
+        res.send({user, token});
     } catch (error) {
         res.status(401).send({ success: false, message: error.message });
     }
