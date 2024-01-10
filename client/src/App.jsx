@@ -6,15 +6,17 @@ import PrivateRoutes from "./utils/PrivateRoutes.jsx"
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false)
+  const [loggedUser, setLoggedUser] = useState("")
+
 
   return (
     <>
       <Router>
         <Routes>
           <Route element={<PrivateRoutes isLoggedIn={isLoggedIn} />}>
-            <Route path="/" element={<Dashboard setLoggedIn={setLoggedIn} />} />
+            <Route path="/" element={<Dashboard setLoggedIn={setLoggedIn} loggedUser={loggedUser} />} />
           </Route>
-          <Route path="/login" element={<Landing setLoggedIn={setLoggedIn} />} />
+          <Route path="/login" element={<Landing setLoggedIn={setLoggedIn} setLoggedUser={setLoggedUser} />} />
         </Routes>
       </Router>
     </>

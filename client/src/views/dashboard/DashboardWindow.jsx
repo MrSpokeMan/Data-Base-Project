@@ -3,19 +3,18 @@ import GradesMenu from "./GradesMenu";
 import Welcome from "./Welcome";
 
 
-function DashboardWindow({ currentTab }) {
-
+function DashboardWindow({ currentTab, loggedUser }) {
     return (
         <div className="w-full h-full flex flex-row">
             <div className="w-64">
 
             </div>
             {currentTab === "grades" ? (
-                <GradesMenu />
+                <GradesMenu loggedUser={loggedUser} />
             ) : currentTab === "attendance" ? (
-                <AttendanceMenu />
+                <AttendanceMenu loggedUser={loggedUser} />
             ) : (
-                <Welcome />
+                <Welcome loggedUser={loggedUser} />
             )}
         </div>
     );

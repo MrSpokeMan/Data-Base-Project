@@ -2,7 +2,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const Login = ({ setLoggedIn }) => {
+const Login = ({ setLoggedIn, setLoggedUser }) => {
 
   const navigate = useNavigate()
 
@@ -19,16 +19,12 @@ const Login = ({ setLoggedIn }) => {
         },
         body: JSON.stringify({ username, password }),
       });
-      console.log(response)
       if (response.ok) {
-        console.log("Response is okay")
         const data = await response.json()
-        if (data.succces) {
+        if (data.token) {
+          setLoggedUser(data.user)
           setLoggedIn(true)
           navigate("/")
-        } else {
-          console.log("Login at backend didn't work")
-          console.log(data)
         }
       } else {
         console.log("Response is not okay")

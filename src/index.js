@@ -14,7 +14,6 @@ const options = {
 
 app.use(cors(options));
 
-// 4k FULL HD
 const port = process.env.PORT
 
 app.use(bodyParser.json())
@@ -28,7 +27,7 @@ app.post("/login", async function (req, res) {
     try {
         const { user, token } = await login(username, password);
         res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" });
-        res.send({user, token});
+        res.send({ user, token });
     } catch (error) {
         res.status(401).send({ success: false, message: error.message });
     }

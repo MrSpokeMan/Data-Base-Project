@@ -1,8 +1,12 @@
 import GradingIcon from '@mui/icons-material/Grading';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ setLoggedIn, setCurrentTab }) {
+
+    const navigate = useNavigate()
+
 
     function logOut() {
         setLoggedIn(false)
