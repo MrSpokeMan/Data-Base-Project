@@ -72,6 +72,11 @@ export async function getAttendance(student_id) {
     return rows;
 }
 
+export async function updateAttendance(attendanceId) {
+    const [rows, fields] = await pool.query("UPDATE attendance SET is_present=2 WHERE attendance_id=?", [attendanceId])
+    return rows
+}
+
 
 // Username is a surname of a user
 export async function login(username, password) {

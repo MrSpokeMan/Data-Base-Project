@@ -1,5 +1,5 @@
 import express from "express"
-import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance } from "./db.js"
+import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance, updateAttendance } from "./db.js"
 import bodyParser from "body-parser"
 import { authenticate } from "./auth.js"
 import cors from 'cors';
@@ -66,6 +66,11 @@ app.get("/attendance/:id", async function (req, res) {
     const attendance = await getAttendance(req.params.id);
     res.send(attendance);
 });
+
+app.post("/attendance/:id", async function (req, res) {
+    const attendace = await updateAttendance(req.params.id)
+    res.send(attendace)
+})
 
 app.listen(port, function () {
     console.log(`Started application on port ${port}`)
