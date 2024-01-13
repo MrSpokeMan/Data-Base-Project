@@ -5,8 +5,28 @@ function Welcome({ loggedUser }) {
                 <div>
                     <h1><span className=" border-b text-4xl font-semibold">Hello again <span className=" text-violet-500">{loggedUser.name} {loggedUser.surname}</span>!</span></h1>
                 </div>
-                <div className="flex flex-col justify-center items-center w-full h-full">
-                    To be fetched...
+                <div className="flex flex-col justify-evenly w-full h-full">
+                    <div className="text-xl text-justify">
+                        Welcome back to EduConnect!
+                        <br />
+                        We're thrilled to have you here again, ready for another exciting academic journey.
+                        As you log in, take a moment to review the information we have on record for you.
+                        Your details are important to us, and we want to ensure everything is accurate.
+                    </div>
+                    <div className="text-md">
+                        <div>
+                            <span className="font-bold">Name:</span> <span className="text-violet-700 ">{loggedUser.name}</span>
+                        </div>
+                        <div>
+                            <span className="font-bold">Surname: </span> <span className="text-violet-700 ">{loggedUser.surname}</span>
+                        </div>
+                        <div>
+                            <span className="font-bold">Courses: </span> to be fetched...
+                        </div>
+                        <div>
+                            <span className="font-bold"> Average score:</span> to be fetched...
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
