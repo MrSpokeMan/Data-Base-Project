@@ -50,6 +50,21 @@ export async function getTeacherIdByCourseId(id) {
     return rows[0];
 }
 
+export async function getCoursesbyStudentId(id) {
+    const [rows, fields] = await pool.query("SELECT * FROM enrollment WHERE student_id = ?", [id]);
+    return rows;
+}
+
+export async function getGradesByStudentsCourseID(student_id, course_id) {
+    const [rows, fields] = await pool.query("SELECT * FROM grade WHERE student_id = ? AND course_id = ?", [student_id, course_id]);
+    return rows;
+}
+
+export async function getAttendanceByStudentsCourseID(student_id, course_id) {
+    const [rows, fields] = await pool.query("SELECT * FROM attendance WHERE student_id = ? AND course_id = ?", [student_id, course_id]);
+    return rows;
+}
+
 export async function addGrade(grade, student_id, course_id) {
     const teacher_id = await getTeacherIdByCourseId(course_id);
     const [rows, fields] = await pool.query(`INSERT INTO grade (grade, student_id, course_id, teacher_id) VALUES (?, ?, ?, ?)`, [grade, student_id, course_id, teacher_id.teacher_id]);
