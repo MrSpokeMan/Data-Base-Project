@@ -1,32 +1,5 @@
-import { useEffect, useState } from "react";
-
-function Welcome({ loggedUser }) {
-
-    const [studentCourses, setStudentCourses] = useState("")
-
-    useEffect(() => {
-        async function fetchStudentCourses() {
-            try {
-                const response = await fetch(`http://localhost:4000/courses/${loggedUser.student_id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    const coursesName = data.map(enrollment => enrollment.course.name)
-                    setStudentCourses(coursesName)
-                } else {
-                    console.log("Response is not okay")
-                }
-            } catch {
-                console.log("GET didn't work")
-            }
-        }
-        fetchStudentCourses()
-    }, [])
-
+function Welcome({ loggedUser, studentCourses }) {
+    console.log(studentCourses)
     return (
         <div className="w-full h-full flex flex-col justify-center items-center rounded-md">
             <div className="w-2/3 h-3/5 bg-slate-50 p-6 rounded-md">
@@ -50,13 +23,13 @@ function Welcome({ loggedUser }) {
                         </div>
                         <div>
                             <span className="font-bold">Courses: </span>
-                            {Array.isArray(studentCourses) ?
-                                studentCourses.map(function (course, index) {
-                                    return <span key={`demo_snap_${index}`} className="text-violet-700 ">{(index ? ', ' : '') + course.charAt(0).toUpperCase() + course.slice(1)}</span>
-                                }) : " "}
-                        </div>
-                        <div>
-                            <span className="font-bold"> Average score:</span> to be fetched...
+                            {studentCourses &&
+                                studentCourses.map((course, index) => (
+                                    <span key={`demo_snap_${index}`} className="text-violet-500 capitalize">
+                                        {(index ? ', ' : '') + course.course.name}
+                                    </span>
+                                ))}
+
                         </div>
                     </div>
                 </div>
