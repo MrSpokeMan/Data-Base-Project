@@ -1,5 +1,5 @@
 import express from "express"
-import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance, updateAttendance } from "./db.js"
+import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance, updateAttendance, getCoursesbyStudentId, getGradesByStudentsCourseID, getAttendanceByStudentsCourseID } from "./db.js"
 import bodyParser from "body-parser"
 import { authenticate } from "./auth.js"
 import cors from 'cors';
@@ -21,6 +21,21 @@ app.use(bodyParser.json())
 app.get("/welcome", function (req, res) {
     res.send("Witaj w dzienniku elektronicznym!")
 })
+
+app.get("/courses/:id", async function (req, res) {
+    const courses = await getCoursesbyStudentId(req.params.id);
+    res.send(courses);
+});
+
+app.get("/grades/:student_id/:course_id", async function (req, res) {
+    const grades = await getGradesByStudentsCourseID(req.params.student_id, req.params.course_id);
+    res.send(grades);
+});
+
+app.get("/attendance/:student_id/:course_id", async function (req, res) {
+    const attendance = await getAttendanceByStudentsCourseID(req.params.student_id, req.params.course_id);
+    res.send(attendance);
+});
 
 app.post("/login", async function (req, res) {
     const { username, password } = req.body;
