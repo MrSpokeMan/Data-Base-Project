@@ -1,6 +1,7 @@
 import GradingIcon from '@mui/icons-material/Grading';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ setLoggedIn, setCurrentTab }) {
@@ -31,6 +32,9 @@ function Sidebar({ setLoggedIn, setCurrentTab }) {
                 </li>
                 <li className="flex flex-row items-center h-11 hover:bg-violet-300 border-l-4 border-transparent hover:border-violet-500" onClick={() => setCurrentTab("grades")}>
                     <span className="px-5"> <GradingIcon /> Grades</span>
+                </li>
+                <li className="flex flex-row items-center h-11 hover:bg-violet-300 border-l-4 border-transparent hover:border-violet-500" onClick={() => setCurrentTab("")}>
+                    <span className="px-5"> <AccountBoxIcon /> Account info</span>
                 </li>
             </ul>
             <button className="mb-2" onClick={logOut}>
