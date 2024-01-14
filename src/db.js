@@ -52,6 +52,10 @@ export async function getTeacherIdByCourseId(id) {
 
 export async function getCoursesbyStudentId(id) {
     const [rows, fields] = await pool.query("SELECT * FROM enrollment WHERE student_id = ?", [id]);
+    for (let i = 0; i < rows.length; i++) {
+        const [rows2, fields2] = await pool.query("SELECT * FROM course WHERE course_id = ?", [rows[i].course_id]);
+        rows[i].course = rows2[0];
+    }
     return rows;
 }
 
