@@ -5,13 +5,11 @@ function TeacherAddGrade({ loggedUser }) {
     const [targetStudentID, setTargetStudentID] = useState("")
     const [grade, setGrade] = useState("")
     const [courseOptions, setCourseOptions] = useState([])
+    const [studentOptions, setStudentOptions] = useState([])
     const gradesOptions = [2, 3.5, 4, 4.5, 5, 5.5]
 
     const getCourses = async () => {
         try {
-            console.log("tutaj kursy")
-            console.log(loggedUser)
-            // wywala mi sqla tutaj xdd
             const response = await fetch(`http://localhost:4000/teacher/${loggedUser.teacher_id}`, {
                 method: 'GET',
                 headers: {
@@ -20,7 +18,7 @@ function TeacherAddGrade({ loggedUser }) {
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log(data)
+                setCourseOptions(data)
             } else {
                 console.log("Response is not okay")
             }
@@ -29,6 +27,24 @@ function TeacherAddGrade({ loggedUser }) {
         }
     }
 
+    async function getStudentsToCourse() {
+        try {
+            const response = await fetch(`http://localhost:4000/students_course/${targetStudentCourse}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setStudentOptions(data)
+            } else {
+                console.log("Response is not okay")
+            }
+        } catch {
+            console.log("GET didn't work")
+        }
+    }
 
     async function addGrade() {
         event.preventDefault()
@@ -55,11 +71,32 @@ function TeacherAddGrade({ loggedUser }) {
         getCourses()
     }, [])
 
+    useEffect(() => {
+        if (targetStudentCourse === "") return
+        getStudentsToCourse()
+        console.log(studentOptions)
+    }, [targetStudentCourse])
+
     return (
         <div className="flex flex-col">
             <form className="flex flex-col">
-                <input className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" type="text" placeholder="Course" onChange={(e) => setTargetStudentCourse(e.target.value)} />
-                <input className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" type="text" placeholder="Student ID" onChange={(e) => setTargetStudentID(e.target.value)} />
+                <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" value={targetStudentCourse} onChange={(e) => setTargetStudentCourse(e.target.value)}>
+                    <option value=''></option>
+                    {courseOptions.map((course) => (
+                        <option key={course.course_id} value={course.course_id}>
+                            {course.name}
+                        </option>
+                    ))}
+                </select>
+                <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" value={targetStudentID} onChange={(e) => setTargetStudentID(e.target.value)}>
+                    <option value=''></option>
+                    {studentOptions.map(({ student_id }) => (
+                        <option key={student_id} value={student_id}>
+                            {student_id}
+                        </option>
+                    ))}
+                </select>
+                {/* <input className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" type="text" placeholder="Student ID" onChange={(e) => setTargetStudentID(e.target.value)} /> */}
                 <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" id="grades" value={grade} onChange={(e) => setGrade(e.target.value)}>
                     {gradesOptions.map((grade) => (
                         <option key={grade} value={grade}>
@@ -69,7 +106,7 @@ function TeacherAddGrade({ loggedUser }) {
                 </select>
                 <button type="submit" onClick={addGrade}>Add Grade</button>
             </form>
-        </div>
+        </div >
     );
 }
 
