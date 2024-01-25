@@ -1,5 +1,5 @@
 import express from "express"
-import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance, updateAttendance, getCoursesbyStudentId, getGradesByStudentsCourseID, getAttendanceByStudentsCourseID } from "./db.js"
+import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance, updateAttendance, getCoursesbyStudentId, getGradesByStudentsCourseID, getAttendanceByStudentsCourseID, getTeacherCourses, getStudentsInCourse } from "./db.js"
 import bodyParser from "body-parser"
 import { authenticate } from "./auth.js"
 import cors from 'cors';
@@ -30,6 +30,16 @@ app.get("/grades/:student_id/:course_id", async function (req, res) {
 app.get("/attendance/:student_id/:course_id", async function (req, res) {
     const attendance = await getAttendanceByStudentsCourseID(req.params.student_id, req.params.course_id);
     res.send(attendance);
+});
+
+app.get("/teacher/:id", async function (req, res) {
+    const courses = await getTeacherCourses(req.params.id);
+    res.send(courses);
+});
+
+app.get("/students_course/:id", async function (req, res) {
+    const students = await getStudentsInCourse(req.params.id);
+    res.send(students);
 });
 
 app.post("/login", async function (req, res) {

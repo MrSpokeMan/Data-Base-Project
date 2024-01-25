@@ -96,6 +96,15 @@ export async function updateAttendance(attendanceId) {
     return rows
 }
 
+export async function getTeacherCourses(teacher_id) {
+    const [rows, fields] = await pool.query("SELECT * FROM course WHERE teacher_id=?", [teacher_id]);
+    return rows;
+}
+
+export async function getStudentsInCourse(course_id) {
+    const [rows, fields] = await pool.query("SELECT * FROM enrollment WHERE course_id=?", [course_id]);
+    return rows;
+}
 
 // Username is a surname of a user
 export async function login(username, password) {
