@@ -97,8 +97,9 @@ export async function updateAttendance(attendanceId) {
 }
 
 export async function getTeacherCourses(teacher_id) {
-    const [rows, fields] = await pool.query("SELECT * FROM course WHERE teacher_id=?", [teacher_id]);
-    return rows;
+    const [rows, fields] = await pool.query("SELECT course_id FROM teacher WHERE teacher_id=?", [teacher_id]);
+    const [rows2, fields2] = await pool.query("SELECT * FROM course WHERE course_id=?", [rows[0].course_id]);
+    return rows2;
 }
 
 export async function getStudentsInCourse(course_id) {
