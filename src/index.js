@@ -5,14 +5,9 @@ import { authenticate } from "./auth.js"
 import cors from 'cors';
 
 const app = express()
-// it should be like this but CORS is the real enemy...
-const allowedOrigins = ['http://localhost:5173/'];
-const options = {
-    origin: '*',
-    credentials: true,
-}
+const allowedOrigins = ['http://localhost:5173'];
 
-app.use(cors(options));
+app.use(cors(allowedOrigins));
 
 const port = process.env.PORT
 

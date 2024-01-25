@@ -2,8 +2,9 @@ import AttendanceMenu from "./AttendanceMenu";
 import GradesMenu from "./GradesMenu";
 import AccountInfo from "./AccountInfo";
 import { useEffect, useState } from "react";
+import TeacherGradesMenu from "./TeacherGradesMenu";
 
-function DashboardWindow({ currentTab, loggedUser }) {
+function DashboardWindow({ currentTab, loggedUser, userType }) {
 
     const [studentCourses, setStudentCourses] = useState("")
     const [studentCoursesID, setStudentGradesID] = useState("")
@@ -38,7 +39,10 @@ function DashboardWindow({ currentTab, loggedUser }) {
             <div className="w-64">
             </div>
             {currentTab === "grades" ? (
-                <GradesMenu loggedUser={loggedUser} studentCourses={studentCourses} studentCoursesID={studentCoursesID} />
+                (userType == "t" ?
+                    (<TeacherGradesMenu loggedUser={loggedUser} />) :
+                    (<GradesMenu loggedUser={loggedUser} studentCourses={studentCourses} studentCoursesID={studentCoursesID} />))
+
             ) : currentTab === "attendance" ? (
                 <AttendanceMenu loggedUser={loggedUser} />
             ) : (
