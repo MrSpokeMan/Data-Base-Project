@@ -6,7 +6,7 @@ function TeacherAddGrade({ loggedUser }) {
     const [grade, setGrade] = useState("")
     const [courseOptions, setCourseOptions] = useState([])
     const [studentOptions, setStudentOptions] = useState([])
-    const gradesOptions = [2, 3.5, 4, 4.5, 5, 5.5]
+    const gradesOptions = [1, 2, 3, 4, 5, 6]
 
     const getCourses = async () => {
         try {
@@ -78,12 +78,12 @@ function TeacherAddGrade({ loggedUser }) {
     }, [targetStudentCourse])
 
     return (
-        <div className="flex flex-col">
-            <form className="flex flex-col">
+        <div className="flex flex-col h-full w-full items-center">
+            <form className="flex flex-col p-8 h-full w-full justify-center">
                 <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" value={targetStudentCourse} onChange={(e) => setTargetStudentCourse(e.target.value)}>
                     <option value=''></option>
                     {courseOptions.map((course) => (
-                        <option key={course.course_id} value={course.course_id}>
+                        <option className="w-40" key={course.course_id} value={course.course_id}>
                             {course.name}
                         </option>
                     ))}
@@ -96,8 +96,7 @@ function TeacherAddGrade({ loggedUser }) {
                         </option>
                     ))}
                 </select>
-                {/* <input className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" type="text" placeholder="Student ID" onChange={(e) => setTargetStudentID(e.target.value)} /> */}
-                <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" id="grades" value={grade} onChange={(e) => setGrade(e.target.value)}>
+                <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl mb-12" id="grades" value={grade} onChange={(e) => setGrade(e.target.value)}>
                     {gradesOptions.map((grade) => (
                         <option key={grade} value={grade}>
                             {grade}
