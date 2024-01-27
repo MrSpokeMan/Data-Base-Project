@@ -86,6 +86,26 @@ function TeacherViewStudentGrades({ loggedUser }) {
         }
     }
 
+    async function deleteGrade(gradeID) {
+        try {
+            const response = await fetch(`http://localhost:4000/grade/${gradeID}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                getStudentGradesByCourse()
+                console.log(data)
+            } else {
+                console.log("Response is not okay")
+            }
+        } catch {
+            console.log("DELETE didn't work")
+        }
+
+    }
 
     useEffect(() => {
         getCourses()
@@ -94,14 +114,10 @@ function TeacherViewStudentGrades({ loggedUser }) {
     useEffect(() => {
         if (targetStudentCourse === "") return
         getStudentsToCourse()
-    }, [targetStudentCourse])
-
-    useEffect(() => {
         if (targetStudentID === "") return
         getStudentGradesByCourse()
         console.log(targetStudentGrades)
-        console.log(targetStudentGrades[0])
-    }, [targetStudentID])
+    }, [targetStudentCourse, targetStudentID])
 
     return (
         <>
@@ -126,10 +142,10 @@ function TeacherViewStudentGrades({ loggedUser }) {
             <div>
                 <h1 className="border-b text-2xl font-semibold">Students name grades in Course</h1>
                 <ul className="flex flex-row">
-                    {targetStudentGrades.map(({ grade }) => (
+                    {targetStudentGrades.map((grade) => (
                         <li className="mr-4" key={grade.grade_id}>
-                            {grade} with id: {grade.grade_id}
-                            <span>
+                            {grade.grade} with id: {grade.grade_id}
+                            <span onClick={() => { deleteGrade(grade.grade_id) }}>
                                 <CloseIcon />
                             </span>
                         </li>

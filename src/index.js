@@ -69,7 +69,7 @@ app.get("/student/:id", async function (req, res) {
     res.send(student);
 });
 
-app.delete("/grade/:id", authenticate, async function (req, res) {
+app.delete("/grade/:id", async function (req, res) {
     const result = await deleteGrade(req.params.id);
     res.send(result);
 });
