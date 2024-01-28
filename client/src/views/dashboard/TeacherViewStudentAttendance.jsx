@@ -67,18 +67,48 @@ function TeacherVireStudentAttendance({ loggedUser }) {
 
     }
 
+    async function changeSelectedStudentAttendance(attendanceID, isExcused) {
+        try {
+            const response = await fetch(`http://localhost:4000/attendance/${attendanceID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    is_excused: isExcused
+                })
+            });
+            console.log(response)
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data)
+            } else {
+                console.log("Response is not okay")
+            }
+        } catch {
+            console.log("PUT didn't work")
+        }
+        fetchAgain()
+    }
+
 
     useEffect(() => {
         getCourses()
     }, [])
 
-    useEffect(() => {
+    const fetchAgain = () => {
         if (targetStudentCourse === "") return
         getStudentsToCourse()
         if (targetStudentID === "") return
         getStudentAttendanceByCourse()
         console.log(targetStudentAttendance)
+    }
+
+
+    useEffect(() => {
+        fetchAgain()
     }, [targetStudentCourse, targetStudentID])
+
 
     return (
         <>
@@ -125,8 +155,8 @@ function TeacherVireStudentAttendance({ loggedUser }) {
                                         minute: '2-digit'
                                     })}
                                 </span>}
-                            <button className=" ml-10"> excused absence</button>
-                            <button className=" ml-4"> unexcused absence</button>
+                            <button className=" ml-10" onClick={(e) => { e.preventDefault(); changeSelectedStudentAttendance(attendance.attendance_id, 1); }}> excused absence</button>
+                            <button className=" ml-4" onClick={(e) => { e.preventDefault(); changeSelectedStudentAttendance(attendance.attendance_id, 0); }}> unexcused absence</button>
                         </li>
                     ))}
                 </ul>
