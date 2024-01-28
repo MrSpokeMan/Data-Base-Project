@@ -92,7 +92,7 @@ export async function getAttendance(student_id) {
 }
 
 export async function updateAttendance(attendanceId) {
-    const [rows, fields] = await pool.query("UPDATE attendance SET is_present=2 WHERE attendance_id=?", [attendanceId])
+    const [rows, fields] = await pool.query("UPDATE attendance SET is_present=1 WHERE attendance_id=?", [attendanceId])
     return rows
 }
 

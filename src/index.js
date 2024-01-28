@@ -86,7 +86,7 @@ app.get("/attendance/:id", async function (req, res) {
     res.send(attendance);
 });
 
-app.post("/attendance/:id", async function (req, res) {
+app.put("/attendance/:id", async function (req, res) {
     const attendace = await updateAttendance(req.params.id)
     res.send(attendace)
 })
