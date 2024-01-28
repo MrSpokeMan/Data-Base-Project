@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
-function TeacherAddGrade({ loggedUser }) {
+function TeacherVireStudentAttendance({ loggedUser }) {
     const [targetStudentCourse, setTargetStudentCourse] = useState("")
     const [targetStudentID, setTargetStudentID] = useState("")
-    const [grade, setGrade] = useState("")
     const [courseOptions, setCourseOptions] = useState([])
     const [studentOptions, setStudentOptions] = useState([])
-    const gradesOptions = [1, 2, 3, 4, 5, 6]
+    const [targetStudentAttendance, setTargetStudentAttendance] = useState([])
 
     const getCourses = async () => {
         try {
@@ -46,26 +45,28 @@ function TeacherAddGrade({ loggedUser }) {
         }
     }
 
-    async function addGrade() {
-        event.preventDefault()
+    async function getStudentAttendanceByCourse() {
         try {
-            const response = await fetch('http://localhost:4000/grade', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:4000/attendance/${targetStudentID}/${targetStudentCourse}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ grade: grade, student_id: targetStudentID, course_id: targetStudentCourse, }),
             });
             if (response.ok) {
                 const data = await response.json();
+                setTargetStudentAttendance("")
+                setTargetStudentAttendance(data)
                 console.log(data)
             } else {
                 console.log("Response is not okay")
             }
         } catch {
-            console.log("POST didn't work")
+            console.log("GET didn't work")
         }
+
     }
+
 
     useEffect(() => {
         getCourses()
@@ -74,12 +75,14 @@ function TeacherAddGrade({ loggedUser }) {
     useEffect(() => {
         if (targetStudentCourse === "") return
         getStudentsToCourse()
-        console.log(studentOptions)
-    }, [targetStudentCourse])
+        if (targetStudentID === "") return
+        getStudentAttendanceByCourse()
+        console.log(targetStudentAttendance)
+    }, [targetStudentCourse, targetStudentID])
 
     return (
-        <div className="flex flex-col h-full w-full items-center">
-            <form className="flex flex-col p-8 h-full w-full justify-center">
+        <>
+            <form>
                 <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" value={targetStudentCourse} onChange={(e) => setTargetStudentCourse(e.target.value)}>
                     <option value=''></option>
                     {courseOptions.map((course) => (
@@ -96,17 +99,40 @@ function TeacherAddGrade({ loggedUser }) {
                         </option>
                     ))}
                 </select>
-                <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl mb-12" id="grades" value={grade} onChange={(e) => setGrade(e.target.value)}>
-                    {gradesOptions.map((grade) => (
-                        <option key={grade} value={grade}>
-                            {grade}
-                        </option>
+                <ul className="flex flex-col">
+                    {targetStudentAttendance.map((attendance) => (
+                        <li className="mr-4" key={attendance.attendance_id}>
+                            {attendance.is_present === 0 ?
+                                <span className="text-red-500">
+                                    {new Date(attendance.date).toLocaleDateString('en-GB', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: '2-digit'
+                                    })}{' '}
+                                    {new Date(attendance.date).toLocaleTimeString('en-GB', {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}
+                                </span> :
+                                <span className="text-green-500">
+                                    {new Date(attendance.date).toLocaleDateString('en-GB', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: '2-digit'
+                                    })}{' '}
+                                    {new Date(attendance.date).toLocaleTimeString('en-GB', {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}
+                                </span>}
+                            <button className=" ml-10"> excused absence</button>
+                            <button className=" ml-4"> unexcused absence</button>
+                        </li>
                     ))}
-                </select>
-                <button type="submit" onClick={addGrade}>Add Grade</button>
+                </ul>
             </form>
-        </div >
+        </>
     );
 }
 
-export default TeacherAddGrade;
+export default TeacherVireStudentAttendance;
