@@ -87,7 +87,8 @@ app.get("/attendance/:id", async function (req, res) {
 });
 
 app.put("/attendance/:id", async function (req, res) {
-    const attendace = await updateAttendance(req.params.id)
+    const { is_excused } = req.body
+    const attendace = await updateAttendance(is_excused, req.params.id)
     res.send(attendace)
 })
 
