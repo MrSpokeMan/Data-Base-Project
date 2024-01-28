@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
-import CloseIcon from '@mui/icons-material/Close';
+import { useState, useEffect } from "react"
 
-function TeacherViewStudentGrades({ loggedUser }) {
-    const [courseOptions, setCourseOptions] = useState([])
-    const [targetStudentID, setTargetStudentID] = useState("")
+function TeacherAddAttendance({ loggedUser }) {
     const [targetStudentCourse, setTargetStudentCourse] = useState("")
+    const [targetStudentID, setTargetStudentID] = useState("")
+    const [courseOptions, setCourseOptions] = useState([])
     const [studentOptions, setStudentOptions] = useState([])
-    const [targetStudentGrades, setTargetStudentGrades] = useState([])
 
     const getCourses = async () => {
         try {
@@ -46,48 +44,6 @@ function TeacherViewStudentGrades({ loggedUser }) {
         }
     }
 
-    async function getStudentGradesByCourse() {
-        try {
-            const response = await fetch(`http://localhost:4000/grades/${targetStudentID}/${targetStudentCourse}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                setTargetStudentGrades("")
-                setTargetStudentGrades(data)
-            } else {
-                console.log("Response is not okay")
-            }
-        } catch {
-            console.log("GET didn't work")
-        }
-
-    }
-
-    async function deleteGrade(gradeID) {
-        try {
-            const response = await fetch(`http://localhost:4000/grade/${gradeID}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                getStudentGradesByCourse()
-                console.log(data)
-            } else {
-                console.log("Response is not okay")
-            }
-        } catch {
-            console.log("DELETE didn't work")
-        }
-
-    }
-
     useEffect(() => {
         getCourses()
     }, [])
@@ -95,13 +51,33 @@ function TeacherViewStudentGrades({ loggedUser }) {
     useEffect(() => {
         if (targetStudentCourse === "") return
         getStudentsToCourse()
-        if (targetStudentID === "") return
-        getStudentGradesByCourse()
-    }, [targetStudentCourse, targetStudentID])
+        console.log(studentOptions)
+    }, [targetStudentCourse])
+
+    async function addAttendance() {
+        event.preventDefault()
+        try {
+            const response = await fetch('http://localhost:4000/attendance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ student_id: targetStudentID, course_id: targetStudentCourse, isPresent: 0 }),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data)
+            } else {
+                console.log("Response is not okay")
+            }
+        } catch {
+            console.log("GET didn't work")
+        }
+    }
 
     return (
-        <>
-            <form>
+        <div className="flex flex-col h-full w-full items-center">
+            <form className="flex flex-col p-8 h-full w-full justify-center">
                 <select className="m-4 p-2 border-solid border-2 border-violet-400 rounded-xl" value={targetStudentCourse} onChange={(e) => setTargetStudentCourse(e.target.value)}>
                     <option value=''></option>
                     {courseOptions.map((course) => (
@@ -118,22 +94,10 @@ function TeacherViewStudentGrades({ loggedUser }) {
                         </option>
                     ))}
                 </select>
+                <button type="submit" onClick={addAttendance}>Add attendance</button>
             </form>
-            <div>
-                <h1 className="border-b text-2xl font-semibold">Students name grades in Course</h1>
-                <ul className="flex flex-row">
-                    {targetStudentGrades.map((grade) => (
-                        <li className="mr-4" key={grade.grade_id}>
-                            {grade.grade}
-                            <span onClick={() => { deleteGrade(grade.grade_id) }}>
-                                <CloseIcon />
-                            </span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </>
+        </div >
     );
 }
 
-export default TeacherViewStudentGrades;
+export default TeacherAddAttendance;

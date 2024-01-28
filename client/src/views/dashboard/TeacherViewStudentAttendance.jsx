@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import CloseIcon from '@mui/icons-material/Close';
+import { useEffect, useState } from "react"
 
-function TeacherViewStudentGrades({ loggedUser }) {
-    const [courseOptions, setCourseOptions] = useState([])
-    const [targetStudentID, setTargetStudentID] = useState("")
+function TeacherVireStudentAttendance({ loggedUser }) {
     const [targetStudentCourse, setTargetStudentCourse] = useState("")
+    const [targetStudentID, setTargetStudentID] = useState("")
+    const [courseOptions, setCourseOptions] = useState([])
     const [studentOptions, setStudentOptions] = useState([])
-    const [targetStudentGrades, setTargetStudentGrades] = useState([])
+    const [targetStudentAttendance, setTargetStudentAttendance] = useState([])
 
     const getCourses = async () => {
         try {
@@ -46,9 +45,9 @@ function TeacherViewStudentGrades({ loggedUser }) {
         }
     }
 
-    async function getStudentGradesByCourse() {
+    async function getStudentAttendanceByCourse() {
         try {
-            const response = await fetch(`http://localhost:4000/grades/${targetStudentID}/${targetStudentCourse}`, {
+            const response = await fetch(`http://localhost:4000/attendance/${targetStudentID}/${targetStudentCourse}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,8 +55,9 @@ function TeacherViewStudentGrades({ loggedUser }) {
             });
             if (response.ok) {
                 const data = await response.json();
-                setTargetStudentGrades("")
-                setTargetStudentGrades(data)
+                setTargetStudentAttendance("")
+                setTargetStudentAttendance(data)
+                console.log(data)
             } else {
                 console.log("Response is not okay")
             }
@@ -67,26 +67,6 @@ function TeacherViewStudentGrades({ loggedUser }) {
 
     }
 
-    async function deleteGrade(gradeID) {
-        try {
-            const response = await fetch(`http://localhost:4000/grade/${gradeID}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                getStudentGradesByCourse()
-                console.log(data)
-            } else {
-                console.log("Response is not okay")
-            }
-        } catch {
-            console.log("DELETE didn't work")
-        }
-
-    }
 
     useEffect(() => {
         getCourses()
@@ -96,7 +76,8 @@ function TeacherViewStudentGrades({ loggedUser }) {
         if (targetStudentCourse === "") return
         getStudentsToCourse()
         if (targetStudentID === "") return
-        getStudentGradesByCourse()
+        getStudentAttendanceByCourse()
+        console.log(targetStudentAttendance)
     }, [targetStudentCourse, targetStudentID])
 
     return (
@@ -118,22 +99,40 @@ function TeacherViewStudentGrades({ loggedUser }) {
                         </option>
                     ))}
                 </select>
-            </form>
-            <div>
-                <h1 className="border-b text-2xl font-semibold">Students name grades in Course</h1>
-                <ul className="flex flex-row">
-                    {targetStudentGrades.map((grade) => (
-                        <li className="mr-4" key={grade.grade_id}>
-                            {grade.grade}
-                            <span onClick={() => { deleteGrade(grade.grade_id) }}>
-                                <CloseIcon />
-                            </span>
+                <ul className="flex flex-col">
+                    {targetStudentAttendance.map((attendance) => (
+                        <li className="mr-4" key={attendance.attendance_id}>
+                            {attendance.is_present === 0 ?
+                                <span className="text-red-500">
+                                    {new Date(attendance.date).toLocaleDateString('en-GB', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: '2-digit'
+                                    })}{' '}
+                                    {new Date(attendance.date).toLocaleTimeString('en-GB', {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}
+                                </span> :
+                                <span className="text-green-500">
+                                    {new Date(attendance.date).toLocaleDateString('en-GB', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: '2-digit'
+                                    })}{' '}
+                                    {new Date(attendance.date).toLocaleTimeString('en-GB', {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}
+                                </span>}
+                            <button className=" ml-10"> excused absence</button>
+                            <button className=" ml-4"> unexcused absence</button>
                         </li>
                     ))}
                 </ul>
-            </div>
+            </form>
         </>
     );
 }
 
-export default TeacherViewStudentGrades;
+export default TeacherVireStudentAttendance;

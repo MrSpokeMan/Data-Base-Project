@@ -3,6 +3,7 @@ import GradesMenu from "./GradesMenu";
 import AccountInfo from "./AccountInfo";
 import { useEffect, useState } from "react";
 import TeacherGradesMenu from "./TeacherGradesMenu";
+import TeacherAttendanceMenu from "./TeacherAttendanceMenu";
 
 function DashboardWindow({ currentTab, loggedUser, userType }) {
 
@@ -44,7 +45,9 @@ function DashboardWindow({ currentTab, loggedUser, userType }) {
                     (<GradesMenu loggedUser={loggedUser} studentCourses={studentCourses} studentCoursesID={studentCoursesID} />))
 
             ) : currentTab === "attendance" ? (
-                <AttendanceMenu loggedUser={loggedUser} />
+                (userType == "t" ?
+                    <TeacherAttendanceMenu loggedUser={loggedUser} /> :
+                    <AttendanceMenu loggedUser={loggedUser} />)
             ) : (
                 <AccountInfo loggedUser={loggedUser} studentCourses={studentCourses} />
             )}
