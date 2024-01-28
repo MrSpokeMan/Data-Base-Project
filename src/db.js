@@ -25,8 +25,8 @@ export async function getStudentById(id) {
 
 export async function getStudentInfoByParentId(parent_id) {
     const [rows, fields] = await pool.query("SELECT student_id FROM student WHERE parent_id = ?", [parent_id]);
-    const [info, fields2] = await pool.query("SELECT grade FROM grade WHERE student_id = ?", [rows[0].student_id]);
-    return info;
+    // const [info, fields2] = await pool.query("SELECT grade FROM grade WHERE student_id = ?", [rows[0].student_id]);
+    return rows[0];
 }
 
 export async function getStudentGradesByStudentId(student_id) {

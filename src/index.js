@@ -1,5 +1,5 @@
 import express from "express"
-import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance, updateAttendance, getCoursesbyStudentId, getGradesByStudentsCourseID, getAttendanceByStudentsCourseID, getTeacherCourses, getStudentsInCourse } from "./db.js"
+import { getStudents, getStudentById, login, addGrade, deleteGrade, checkAttendance, getAttendance, updateAttendance, getCoursesbyStudentId, getGradesByStudentsCourseID, getAttendanceByStudentsCourseID, getTeacherCourses, getStudentsInCourse, getStudentInfoByParentId } from "./db.js"
 import bodyParser from "body-parser"
 import { authenticate } from "./auth.js"
 import cors from 'cors';
@@ -90,6 +90,11 @@ app.put("/attendance/:id", async function (req, res) {
     const attendace = await updateAttendance(req.params.id)
     res.send(attendace)
 })
+
+app.get("/student_id/:id", async function (req, res) {
+    const student = await getStudentInfoByParentId(req.params.id);
+    res.send(student);
+});
 
 app.listen(port, function () {
     console.log(`Started application on port ${port}`)
