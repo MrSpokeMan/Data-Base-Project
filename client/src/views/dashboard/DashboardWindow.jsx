@@ -4,6 +4,9 @@ import AccountInfo from "./AccountInfo";
 import { useEffect, useState } from "react";
 import TeacherGradesMenu from "./TeacherGradesMenu";
 import TeacherAttendanceMenu from "./TeacherAttendanceMenu";
+import ParentGradesMenu from "./ParentGradesMenu";
+import ParentAttendanceMenu from "./ParentAttendanceMenu";
+
 
 function DashboardWindow({ currentTab, loggedUser, userType }) {
 
@@ -40,15 +43,20 @@ function DashboardWindow({ currentTab, loggedUser, userType }) {
             <div className="w-64">
             </div>
             {currentTab === "grades" ? (
-                (userType == "t" ?
+                (userType === "t" ?
                     (<TeacherGradesMenu loggedUser={loggedUser} />) :
-                    (<GradesMenu loggedUser={loggedUser} studentCourses={studentCourses} studentCoursesID={studentCoursesID} />))
-
-            ) : currentTab === "attendance" ? (
-                (userType == "t" ?
-                    <TeacherAttendanceMenu loggedUser={loggedUser} /> :
-                    <AttendanceMenu loggedUser={loggedUser} />)
-            ) : (
+                    (userType === "p" ? (
+                        <ParentGradesMenu loggedUser={loggedUser} />
+                    ) : (
+                        (<GradesMenu loggedUser={loggedUser} studentCourses={studentCourses} studentCoursesID={studentCoursesID} />)))
+                )) : currentTab === "attendance" ? (
+                    (userType === "t" ?
+                        <TeacherAttendanceMenu loggedUser={loggedUser} /> :
+                        (userType === "p" ?
+                            <ParentAttendanceMenu loggedUser={loggedUser} /> :
+                            <AttendanceMenu loggedUser={loggedUser} />)
+                    )
+                ) : (
                 <AccountInfo loggedUser={loggedUser} studentCourses={studentCourses} />
             )}
         </div>

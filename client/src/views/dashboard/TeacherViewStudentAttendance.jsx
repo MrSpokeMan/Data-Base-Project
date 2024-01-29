@@ -155,8 +155,8 @@ function TeacherVireStudentAttendance({ loggedUser }) {
                                         minute: '2-digit'
                                     })}
                                 </span>}
-                            <button className=" ml-10" onClick={(e) => { e.preventDefault(); changeSelectedStudentAttendance(attendance.attendance_id, 1); }}> excused absence</button>
-                            <button className=" ml-4" onClick={(e) => { e.preventDefault(); changeSelectedStudentAttendance(attendance.attendance_id, 0); }}> unexcused absence</button>
+                            <button className=" ml-10" onClick={(e) => { e.preventDefault(); changeSelectedStudentAttendance(attendance.attendance_id, 1); }}> Excuse absence</button>
+                            <button className=" ml-4" onClick={(e) => { e.preventDefault(); changeSelectedStudentAttendance(attendance.attendance_id, 0); }}> Unexcuse absence</button>
                         </li>
                     ))}
                 </ul>

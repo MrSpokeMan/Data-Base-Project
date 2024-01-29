@@ -87,7 +87,7 @@ export async function checkAttendance(student_id, course_id, isPresent) {
 }
 
 export async function getAttendance(student_id) {
-    const [rows, fields] = await pool.query("SELECT course_id, student_id, date, is_present FROM attendance WHERE student_id = ?", [student_id]);
+    const [rows, fields] = await pool.query("SELECT course_id, student_id, date, is_present, attendance_id FROM attendance WHERE student_id = ?", [student_id]);
     return rows;
 }
 
