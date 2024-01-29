@@ -8,7 +8,6 @@ function Sidebar({ setLoggedIn, setCurrentTab }) {
 
     const navigate = useNavigate()
 
-
     function logOut() {
         setLoggedIn(false)
         navigate("/login")

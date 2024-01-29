@@ -15,7 +15,6 @@ function ParentGradesMenu({ loggedUser }) {
                 });
                 if (responseID.ok) {
                     const dataID = await responseID.json();
-                    console.log(dataID);
                     const responseCoursesID = await fetch(`http://localhost:4000/courses/${dataID.student_id}`, {
                         method: 'GET',
                         headers: {
@@ -24,12 +23,8 @@ function ParentGradesMenu({ loggedUser }) {
                     });
                     if (responseCoursesID.ok) {
                         const tempData = await responseCoursesID.json();
-                        console.log(tempData);
-
                         const coursesID = tempData.map(enrollment => enrollment.course_id);
-
                         for (const element of coursesID) {
-                            // Fetch student grades for each course
                             const responseGrades = await fetch(`http://localhost:4000/grades/${dataID.student_id}/${element}`, {
                                 method: 'GET',
                                 headers: {

@@ -25,8 +25,6 @@ function ParentAttendanceMenu({ loggedUser }) {
         fetchData()
     }
 
-
-
     async function fetchData() {
         try {
             const responseID = await fetch(`http://localhost:4000/student_id/${loggedUser.parent_id}`, {

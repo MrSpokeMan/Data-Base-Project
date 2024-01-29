@@ -1,5 +1,4 @@
 function Welcome({ loggedUser, studentCourses }) {
-    console.log(studentCourses)
     return (
         <div className="w-full h-full flex flex-col justify-center items-center rounded-md">
             <div className="w-2/3 h-3/5 bg-slate-50 p-6 rounded-md">

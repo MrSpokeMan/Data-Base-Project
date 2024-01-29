@@ -24,7 +24,6 @@ function DashboardWindow({ currentTab, loggedUser, userType }) {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    // const coursesName = data.map(enrollment => enrollment.course.name)
                     const coursesID = data.map(enrollment => enrollment.course_id)
                     setStudentCourses(data)
                     setStudentGradesID(coursesID)
